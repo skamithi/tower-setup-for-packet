@@ -1,0 +1,18 @@
+---
+- include: etc_hosts.yml
+
+- hosts: ansiblesetup
+  become: true
+  vars:
+    base_url_ansible_tower: "http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup"
+  roles:
+    - role: setup-tower
+      ansible_tower_version: 3.2.1
+      tower_servers:
+        - tower1
+        - tower2
+        - tower3
+      postgres_servers:
+        - postgres1
+
+    - role: fetch_ssh_key

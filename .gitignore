@@ -1,0 +1,4 @@
+*.retry
+*.swp
+orig_group_var_all.txt
+.vagrant
