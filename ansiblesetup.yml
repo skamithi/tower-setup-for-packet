@@ -14,5 +14,5 @@
         - tower3
       postgres_servers:
         - postgres1
-
+    - role: network_routes
     - role: fetch_ssh_key

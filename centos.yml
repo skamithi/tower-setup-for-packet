@@ -5,27 +5,12 @@
   become: true
   vars:
     dns_domain: test.local
-  tasks:
-    - name: update all packages
-      yum: name='*' state=latest
+    net_path: "/etc/sysconfig/network-scripts/"
 
-    - name: install some core packages
-      yum: name="{{item}}" update_cache=yes
-      with_items:
-        - vim-enhanced
-        - libselinux-python
+  roles:
+    - role: prep-tower-server
+    - role: network_routes
+      when: network_interfaces is defined
+    - role: firewall
+      when: iptables_rules is defined
 
-
-    - name: set hostname
-      hostname: name="{{ inventory_hostname}}.{{ dns_domain }}"
-    - name: ensure selinux is set to enforcing
-      selinux:
-        policy: targeted
-        state: enforcing
-
-    # Tower install does it as root , not as a sudo user
-    # so install the key into the root account
-    - name: update authorized files
-      authorized_key:
-        user: root
-        key:  "{{ lookup('file', './ansiblesetup.pub.key') }}"

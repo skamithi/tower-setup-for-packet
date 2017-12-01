@@ -1,0 +1,22 @@
+---
+- name: update all packages
+  yum: name='*' state=latest
+
+- name: install some core packages for troubleshooting. Plus rsync which is missing from the isolated node package
+  yum: name="{{item}}" update_cache=yes
+  with_items:
+    - vim-enhanced
+    - libselinux-python
+    - rsync
+- name: set hostname
+  hostname: name="{{ inventory_hostname}}.{{ dns_domain }}"
+
+- name: ensure selinux is set to enforcing
+  selinux:
+    policy: targeted
+    state: enforcing
+
+- name: update authorized files
+  authorized_key:
+    user: root
+    key:  "{{ lookup('file', './ansiblesetup.pub.key') }}"

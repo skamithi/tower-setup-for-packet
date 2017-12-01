@@ -1,0 +1,9 @@
+---
+- name: start firewalld
+  service:
+    name: firewalld
+    state: started
+
+- name: reload firewalld
+  command: "firewall-cmd --reload"
+

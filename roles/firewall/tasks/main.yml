@@ -1,0 +1,27 @@
+---
+- name: remove firewalld
+  yum:
+    name: firewalld
+    state: absent
+
+- name: install iptables
+  yum:
+    name: iptables
+    state: present
+
+- name: configure iptables
+  iptables:
+    chain: "{{ item.chain| default(omit) }}"
+    ctstate: "{{ item.ctstate |default(omit) }}"
+    source: "{{ item.source| default(omit) }}"
+    destination: "{{ item.dest | default(omit) }}"
+    protocol: "{{ item.protocol| default(omit) }}"
+    jump: "{{ item.jump| default(omit) }}"
+    destination_port: "{{ item.dport| default(omit) }}"
+    in_interface: "{{ item.in_iface| default(omit) }}"
+    out_interface: "{{ item.out_iface|default(omit) }}"
+    policy: "{{ item.policy| default(omit) }}"
+  with_items: "{{ iptables_rules }}"
+
+
+

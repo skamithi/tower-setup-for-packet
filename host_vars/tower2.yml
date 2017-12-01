@@ -1,0 +1,10 @@
+net_path: "/etc/sysconfig/network-scripts/"
+network_interfaces:
+  - device: eth1
+    route:
+      - network: 10.1.1.0
+        netmask: 255.255.255.0
+        gateway: 10.1.4.2
+      - network: 10.1.3.0
+        netmask: 255.255.255.0
+        gateway: 10.1.4.2
