@@ -1,0 +1,10 @@
+# Encrypt this file using ansible-vault before using it.
+vault_admin_password: tower
+vault_pg_username: awx
+vault_pg_password: tower
+
+vault_rabbitmq_vhost: tower
+vault_rabbitmq_username: awx
+vault_rabbitmq_password: tower
+vault_rabbitmq_cookie: tower
+

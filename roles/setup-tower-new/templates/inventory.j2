@@ -1,0 +1,16 @@
+[tower]
+{% for item in tower_servers %}
+{{ item }}
+{% endfor %}
+
+[database]
+{% if postgres_streaming_replication == True %}
+{{ postgres_servers[0] }}  postgresrep_role=master
+
+[database_slave]
+{{ postgres_servers[1] }}  postgresrep_role=slave
+
+{% else %}
+{{ postgres_servers[0] }}
+
+{% endif %}

@@ -1,0 +1,30 @@
+{% raw %}
+admin_password: "{{ vault_admin_password }}"
+
+pg_host: "{{ groups['database'][0]}}"
+pg_port: '5432'
+
+{% endraw %}
+
+{% if postgres_streaming_replication == True %}
+
+  {% raw %}
+postgresrep_password: "{{ vault_postgresrep_password }}"
+  {% endraw %}
+
+{% endif %}
+
+{% raw %}
+pg_database: awx
+pg_username: "{{ vault_pg_username }}"
+pg_password: "{{ vault_pg_password }}"
+
+rabbitmq_port: '5672'
+rabbitmq_vhost: "{{ vault_rabbitmq_vhost}}"
+rabbitmq_password: "{{ vault_rabbitmq_password }}"
+rabbitmq_username: "{{ vault_rabbitmq_username }}"
+rabbitmq_cookie: "{{ vault_rabbitmq_cookie }}"
+
+rabbitmq_use_long_name: false
+
+{% endraw %}

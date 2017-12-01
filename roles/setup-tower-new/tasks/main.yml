@@ -1,0 +1,95 @@
+---
+# tasks file for ansible-setup-tower
+
+- assert:
+    that: "ansible_tower_version is defined"
+    msg: "Define the ansible_tower_version variable"
+
+- assert:
+    that: "tower_servers is defined"
+    msg: "Define tower_servers variable with list of tower servers"
+
+- assert:
+    that: "postgres_servers is defined"
+    msg: "Define postgres_server variable with list of postgres servers"
+
+- assert:
+    that: "postgres_servers|length < 3"
+    msg: "Only 2 postgres_servers can be defined"
+
+- assert:
+    that: "postgres_streaming_replication == False and postgres_servers|length == 1"
+    msg: "Postgres streaming replication requires 2 Postgres servers"
+
+- name: download latest tower
+  unarchive:
+    src: "{{tower_install_url }}"
+    dest: "{{ ansible_user_dir }}"
+    remote_src: yes
+    creates: "{{ tower_dir }}/setup.sh"
+
+
+- block:
+
+  - name: copy sam doran postgresql replication role into the tower role directory
+    unarchive:
+      src: https://github.com/samdoran/ansible-role-postgresql-replication/tarball/master
+      dest: "{{ tower_dir }}/roles/"
+      remote_src: yes
+      list_files: yes
+    register: postgres_replication_archive
+
+  - name: create roles/postgresql-replication symlink to the downloaded role
+    file:
+      src: "{{ tower_dir}}/roles/{{ postgres_replication_archive.files[0] }}"
+      dest: "{{ tower_dir}}/roles/postgres-replication"
+      state: link
+
+  - name: copy postgresql-replication playbook to the tower setup root dir
+    copy:
+       src: "{{ tower_dir }}/roles/{{ postgres_replication_archive.files[0] }}/tests/ansible-tower/files/psql-replication.yml"
+       dest: "{{ tower_dir }}/psql-replication.yml"
+       remote_src: true
+
+  when: postgres_streaming_replication == True
+
+
+- name: get status of the group_vars/all path
+  stat: path="{{ tower_dir }}/group_vars/all"
+  register: st
+
+- name: update inventory file, remove all the variables in inventory
+  template:
+    src: inventory.j2
+    dest: "{{ tower_dir }}/inventory"
+
+- block:
+    - name: fetch group_vars/all file from the tower install since it exists
+      fetch:
+        src: "{{ tower_dir }}/group_vars/all"
+        flat: yes
+        dest: orig_group_var_all.txt
+
+    - name: delete group_vars/all
+      file: path="{{tower_dir}}/group_vars/all" state=absent
+
+    - name: create group_vars/all as a directory
+      file: path="{{tower_dir}}/group_vars/all" state=directory
+
+    - name: copy original group_vars/all to group_vars/all/vars
+      copy:
+        src: orig_group_var_all.txt
+        dest: "{{ tower_dir }}/group_vars/all/vars"
+
+    - name: copy default vault file (unencrypted)..encrypte using ansible-vault
+      copy:
+        src: vault_sample.yml
+        dest: "{{ tower_dir }}/group_vars/all/vault"
+
+  when: st.stat.exists == False or st.stat.isdir == False
+
+- name: update inventory variables for the "all" group
+  blockinfile:
+    dest: "{{ tower_dir}}/group_vars/all/vars"
+    block: |
+      {{ lookup('template', 'templates/unencrypted_setup_vars.j2') }}

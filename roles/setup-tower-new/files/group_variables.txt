@@ -1,0 +1,18 @@
+admin_password: "{{ vault_admin_password }}"
+pg_host: postgres1
+# pg_port has to be a string!! or else playbook fails
+pg_port: '5432'
+postgresrep_password: "{{ vault_postgresrep_password }}"
+pg_database: awx
+pg_username: "{{ vault_pg_username }}"
+pg_password: "{{ vault_pg_password }}"
+
+# rabbitmq port has to be string
+rabbitmq_port: '5672'
+rabbitmq_vhost: "{{ vault_rabbitmq_vhost }}"
+rabbitmq_username: "{{ vault_rabbitmq_username }}"
+rabbitmq_password: "{{ vault_rabbitmq_password }}"
+rabbitmq_cookie: "{{ vault_rabbitmq_cookie }}}"
+
+rabbitmq_use_long_name: false
+
