@@ -6,42 +6,51 @@ raise "vagrant-libvirt plugin must be installed, try $ vagrant plugin install va
 postgresnodes = {
   :postgres1 => {
     :ipaddr => "10.1.1.3",
-    :bridge  => "vault_net"
+    :bridge  => "vault_net",
+    :group => 'tower1'
   },
   :postgres2 => {
     :ipaddr => "10.1.4.3",
-    :bridge => "vault_net2"
+    :bridge => "vault_net2",
+    :group => 'tower2'
   }
 }
 
 towernodes = {
   "tower1a" => {
     :ipaddr => "10.1.1.4",
-    :bridge => "vault_net"
+    :bridge => "vault_net",
+    :group => 'tower1'
   },
   "tower1b" => {
     :ipaddr => "10.1.1.5",
-    :bridge => "vault_net"
+    :bridge => "vault_net",
+    :group => 'tower1'
   },
   "tower1c" => {
     :ipaddr => "10.1.1.6",
-    :bridge => "vault_net"
+    :bridge => "vault_net",
+    :group => 'tower1'
   },
   "tower2a" => {
     :ipaddr => "10.1.4.10",
-    :bridge => "vault_net2"
+    :bridge => "vault_net2",
+    :group => 'tower2'
   },
   "tower2b" => {
     :ipaddr => "10.1.4.11",
-    :bridge => "vault_net2"
+    :bridge => "vault_net2",
+    :group => 'tower2'
   },
   "tower2c" => {
     :ipaddr => "10.1.4.12",
-    :bridge => "vault_net2"
+    :bridge => "vault_net2",
+    :group => 'tower2'
   },
   "tower3a" => {
     :ipaddr => "10.1.3.10",
-    :bridge => "vault_net3"
+    :bridge => "vault_net3",
+    :group => 'tower3'
   }
 }
 
@@ -93,6 +102,9 @@ Vagrant.configure("2") do |config|
         ansible.playbook = ansible_play
         ansible.extra_vars = {
           ruby_etc_hosts: allservers
+        }
+        ansible.groups = {
+          "#{values[:group]}": [nodename]
         }
       end
 
