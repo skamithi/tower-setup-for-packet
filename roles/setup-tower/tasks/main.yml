@@ -79,6 +79,11 @@
     src: inventory.j2
     dest: "{{ tower_dir }}/inventory"
 
+- name: add ansible.cfg to disable host key checking
+  file:
+    copy: ansible.cfg
+    dest: "{{ tower_dir }}/ansible.cfg
+
 - block:
     - name: fetch group_vars/all file from the tower install since it exists
       fetch:
