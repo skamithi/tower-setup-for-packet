@@ -90,7 +90,7 @@ Vagrant.configure("2") do |config|
 
   end
 
-  towernodes.each do |nodename, values|
+  allservers.each do |nodename, values|
     config.vm.define "#{nodename}" do |device|
       device.vm.hostname = nodename
       device.vm.box = vm_box
