@@ -7,4 +7,3 @@ vault_rabbitmq_vhost: tower
 vault_rabbitmq_username: awx
 vault_rabbitmq_password: tower
 vault_rabbitmq_cookie: tower
-

@@ -102,10 +102,10 @@
         src: vault_sample.yml
         dest: "{{ tower_dir }}/group_vars/all/vault.yml"
 
-  when: st.stat.exists == False or st.stat.isdir == False
+  when: st.stat.isdir == False or st.stat.isdir == False
 
 - name: update inventory variables for the "all" group
   blockinfile:
-    dest: "{{ tower_dir}}/group_vars/all/vars"
+    dest: "{{ tower_dir}}/group_vars/all/vars.yml"
     block: |
       {{ lookup('template', 'templates/unencrypted_setup_vars.j2') }}

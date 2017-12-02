@@ -24,15 +24,11 @@ Role Variables
 * ``postgres_server`` **(required)**: List of DNS names of Postgres servers. List only **2**
   servers. The first server is the master server. The 2nd server is a slave server.
 
-* ``tower_install_url``: Defaults to install the latest Tower install playbook (_no
-  bundle_). Change this variable if you wish to download a Setup bundle. For
-example: ``http://releases.ansible.com/ansible-tower/setup-bundle/ansible-tower-setup-bundle-latest.el7.tar.gz ``
-
 * ``postgres_streaming_replication``: Defaults to ``false``. If set to true assumes
   you want to this role to create a pair of postgres database servers with
-  streaming replication enabled
+  streaming replication enabled. If using this role on a AWS setup, leave it as False as AWS RDS provides its own HA.
 
-
+* ``use_bundle``: if set to true it will download the Ansible tower bundle
 
 Dependencies
 ------------
