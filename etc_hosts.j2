@@ -1,0 +1,5 @@
+{% for _hostname, _value in ruby_etc_hosts.iteritems() %}
+- address: "{{ _value.ipaddr }}"
+  hostnames:
+    - "{{ _hostname }}"
+{% endfor %}
