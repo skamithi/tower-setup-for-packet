@@ -1,4 +1,2 @@
 ---
 # vars file for ansible-setup-tower
-#
-tower_dir: "{{ ansible_user_dir }}/ansible-tower-setup-{{ ansible_tower_version }}"

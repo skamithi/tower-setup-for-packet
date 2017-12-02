@@ -3,7 +3,7 @@
 
 raise "vagrant-libvirt plugin must be installed, try $ vagrant plugin install vagrant-libvirt" unless Vagrant.has_plugin? "vagrant-libvirt"
 
-towernodes = {
+postgresnodes = {
   :postgres1 => {
     :ipaddr => "10.1.1.3",
     :bridge  => "vault_net"
@@ -11,8 +11,10 @@ towernodes = {
   :postgres2 => {
     :ipaddr => "10.1.4.3",
     :bridge => "vault_net2"
-  },
+  }
+}
 
+towernodes = {
   "tower1a" => {
     :ipaddr => "10.1.1.4",
     :bridge => "vault_net"
@@ -43,6 +45,8 @@ towernodes = {
   }
 }
 
+allservers = postgresnodes.merge(towernodes)
+
 vm_box = 'centos7'
 ansible_play = 'centos.yml'
 default_mem = 2048
@@ -69,7 +73,9 @@ Vagrant.configure("2") do |config|
     device.vm.provision :ansible do |ansible|
       ansible.playbook = 'ansiblesetup.yml'
       ansible.extra_vars = {
-        ruby_etc_hosts: towernodes
+        ruby_etc_hosts: allservers,
+        tower_servers: towernodes.keys(),
+        postgres_servers: postgresnodes.keys()
       }
     end
 
@@ -86,7 +92,7 @@ Vagrant.configure("2") do |config|
       device.vm.provision :ansible do |ansible|
         ansible.playbook = ansible_play
         ansible.extra_vars = {
-          ruby_etc_hosts: towernodes
+          ruby_etc_hosts: allservers
         }
       end
 

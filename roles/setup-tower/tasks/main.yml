@@ -1,6 +1,22 @@
 ---
 # tasks file for ansible-setup-tower
 
+- set_fact:
+    bundle_var: "-bundle"
+  when: use_bundle == True
+
+- set_fact:
+    base_url_ansible_tower: "http://releases.ansible.com/ansible-tower/setup{{bundle_var}}/ansible-tower-setup{{bundle_var}}"
+
+- set_fact:
+    tower_install_url: "{{ base_url_ansible_tower}}-{{ansible_tower_version}}.tar.gz"
+
+- set_fact:
+    tower_dir: "{{ ansible_user_dir }}/ansible-tower-setup{{bundle_var}}-{{ ansible_tower_version }}"
+
+- set_fact:
+    tower_install_url: "{{ base_url_ansible_tower}}-{{ansible_tower_version}}.tar.gz"
+
 - assert:
     that: "ansible_tower_version is defined"
     msg: "Define the ansible_tower_version variable"
@@ -15,10 +31,10 @@
 
 - assert:
     that: "postgres_servers|length < 3"
-    msg: "Only 2 postgres_servers can be defined"
+    msg: "More than 3 postgres servers it not allowed"
 
 - assert:
-    that: "postgres_streaming_replication == False and postgres_servers|length == 1"
+    that: "postgres_streaming_replication == True and postgres_servers|length == 2"
     msg: "Postgres streaming replication requires 2 Postgres servers"
 
 - name: download latest tower
@@ -79,12 +95,12 @@
     - name: copy original group_vars/all to group_vars/all/vars
       copy:
         src: orig_group_var_all.txt
-        dest: "{{ tower_dir }}/group_vars/all/vars"
+        dest: "{{ tower_dir }}/group_vars/all/vars.yml"
 
     - name: copy default vault file (unencrypted)..encrypte using ansible-vault
       copy:
         src: vault_sample.yml
-        dest: "{{ tower_dir }}/group_vars/all/vault"
+        dest: "{{ tower_dir }}/group_vars/all/vault.yml"
 
   when: st.stat.exists == False or st.stat.isdir == False
 

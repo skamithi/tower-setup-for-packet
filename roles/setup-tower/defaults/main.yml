@@ -1,7 +1,7 @@
 ---
 # defaults file for ansible-setup-tower
-
-base_url_ansible_tower: 'http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup'
+# Set this to true if using the Ansible tower bundle
+use_bundle: false
+bundle_var: ''
 postgres_streaming_replication: false
-tower_install_url: "{{ base_url_ansible_tower}}-{{ansible_tower_version}}.tar.gz"
 
