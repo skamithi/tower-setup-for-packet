@@ -54,7 +54,23 @@ towernodes = {
   }
 }
 
+testservers = {
+  "tower1test" => {
+    :ipaddr => '10.1.1.20',
+    :bridge => 'vault_net'
+  },
+  "tower2test" => {
+    :ipaddr => '10.1.4.20',
+    :bridge => 'vault_net2'
+  },
+  "tower3test" => {
+    :ipaddr => '10.1.3.20',
+    :bridge => 'vault_net3'
+  }
+}
+
 allservers = postgresnodes.merge(towernodes)
+allservers = allservers.merge(testservers)
 
 vm_box = 'centos7'
 ansible_play = 'centos.yml'
@@ -103,9 +119,11 @@ Vagrant.configure("2") do |config|
         ansible.extra_vars = {
           ruby_etc_hosts: allservers
         }
-        ansible.groups = {
-          "#{values[:group]}": [nodename]
-        }
+        if values[:group]
+          ansible.groups = {
+            "#{values[:group]}": [nodename]
+          }
+        end
       end
 
       # NETWORK INTERFACES
