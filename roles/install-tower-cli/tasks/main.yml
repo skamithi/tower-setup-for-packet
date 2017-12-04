@@ -10,4 +10,4 @@
 - name: copy tower demo playbook
   copy:
     src: tower_demo.yml
-    dst: "/root/"
+    dest: "/root/"
