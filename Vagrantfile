@@ -51,6 +51,16 @@ towernodes = {
     :ipaddr => "10.1.3.10",
     :bridge => "vault_net3",
     :group => 'tower3'
+  },
+  "tower3b" => {
+    :ipaddr => "10.1.3.11",
+    :bridge => "vault_net3",
+    :group => 'tower3'
+  },
+  "tower4a" => {
+    :ipaddr => '10.1.5.3',
+    :bridge => 'vault_net5',
+    :group => 'tower4'
   }
 }
 
@@ -66,6 +76,10 @@ testservers = {
   "tower3test" => {
     :ipaddr => '10.1.3.20',
     :bridge => 'vault_net3'
+  },
+  "tower4test" => {
+    :ipaddr => '10.1.5.20',
+    :bridge => 'vault_net5'
   }
 }
 
@@ -197,6 +211,13 @@ Vagrant.configure("2") do |config|
       :libvirt__forward_mode => 'veryisolated',
       :libvirt__dhcp_enabled => false,
       :libvirt__network_name => 'vault_net4'
+    device.vm.network "private_network",
+      :ip => '10.1.5.2',
+      :prefix => '24',
+      :libvirt__forward_mode => 'veryisolated',
+      :libvirt__dhcp_enabled => false,
+      :libvirt__network_name => 'vault_net5'
+
     device.vm.provision :ansible do |ansible|
       ansible.playbook = 'centos.yml'
        ansible.extra_vars = {
