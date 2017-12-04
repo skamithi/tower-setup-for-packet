@@ -1,0 +1,51 @@
+---
+- hosts: localhost
+  connection: local
+  vars:
+     node_groups:
+      - tower1
+      - tower2
+      - tower3
+      - tower4
+     tower_test_hosts:
+         - ip: 10.1.1.20
+           group: tower1
+         - ip: 10.1.4.20
+           group: tower2
+         - ip: 10.1.3.20
+           group: tower3
+         - ip: 10.1.5.20
+           group: tower4
+  tasks:
+    - name: tower_host to each inventory
+      tower_inventory:
+        name: "{{ item }}_inv"
+        description: "{{ item }} Inventory"
+        organization: "Default"
+        tower_username: admin
+        tower_password: "{{ admin_password }}"
+        tower_host: tower1a
+      with_items: "{{ node_groups }}"
+
+    - name: add tower_host to each inventory
+      tower_host:
+        name: "{{ item.group}}test"
+        inventory: "{{ item.group}}_inv"
+        tower_username: admin
+        tower_password: "{{ admin_password }}"
+        tower_host: tower1a
+        variables: "ansible_host: {{ item.ip}}"
+      with_items: "{{ tower_test_hosts}}"
+
+    - name: job for the demo
+      tower_job_template:
+        name: "{{ item }}_job_template"
+        job_type: run
+        inventory: "{{item}}_inv"
+        project: "Demo Project"
+        machine_credential: "test_tower_cred"
+        playbook: hello_world.yml
+        tower_username: admin
+        tower_password: "{{ admin_password }}"
+        tower_host: tower1a
+      with_items: "{{ node_groups}}"

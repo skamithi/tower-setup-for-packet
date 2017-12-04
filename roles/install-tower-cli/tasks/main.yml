@@ -6,3 +6,8 @@
 - name: install ansible-tower-cli
   pip:
     name: ansible-tower-cli
+
+- name: copy tower demo playbook
+  copy:
+    src: tower_demo.yml
+    dst: "/root/"
