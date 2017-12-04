@@ -9,7 +9,7 @@
 
   roles:
     - role: prep-tower-server
-    - role: network_routes
+    - role: network-routes
       when: network_interfaces is defined
     - role: firewall
       when: iptables_rules is defined

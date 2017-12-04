@@ -1,0 +1,8 @@
+---
+- name: install python pip
+  yum:
+    name: python-pip
+
+- name: install ansible-tower-cli
+  pip:
+    name: ansible-tower-cli

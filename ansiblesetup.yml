@@ -7,7 +7,11 @@
     use_bundle: true
     postgres_streaming_replication: true
     ansible_tower_version: 3.2.1-1.el7
+  pre_tasks:
+    - yum: name=vim-enhanced
   roles:
+    - role: geerlingguy.repo-epel
     - role: setup-tower
-    - role: network_routes
-    - role: fetch_ssh_key
+    - role: network-routes
+    - role: fetch-ssh-key
+    - role: install-tower-cli
