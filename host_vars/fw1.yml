@@ -2,6 +2,7 @@ iptables_rules:
   - chain: FORWARD
     source: 10.1.1.10/32
     dest: 10.1.4.10/32
+    protocol: tcp
     dport: 22
     in_iface: eth1
     out_iface: eth2
