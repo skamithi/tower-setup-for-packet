@@ -46,21 +46,6 @@ towernodes = {
     :ipaddr => "10.1.4.12",
     :bridge => "vault_net2",
     :group => 'tower2'
-  },
-  "tower3a" => {
-    :ipaddr => "10.1.3.10",
-    :bridge => "vault_net3",
-    :group => 'tower3'
-  },
-  "tower3b" => {
-    :ipaddr => "10.1.3.11",
-    :bridge => "vault_net3",
-    :group => 'tower3'
-  },
-  "tower4a" => {
-    :ipaddr => '10.1.5.3',
-    :bridge => 'vault_net5',
-    :group => 'tower4'
   }
 }
 
@@ -72,14 +57,6 @@ testservers = {
   "tower2test" => {
     :ipaddr => '10.1.4.20',
     :bridge => 'vault_net2'
-  },
-  "tower3test" => {
-    :ipaddr => '10.1.3.20',
-    :bridge => 'vault_net3'
-  },
-  "tower4test" => {
-    :ipaddr => '10.1.5.20',
-    :bridge => 'vault_net5'
   }
 }
 
