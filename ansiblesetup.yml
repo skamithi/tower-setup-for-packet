@@ -5,8 +5,8 @@
   become: true
   vars:
     use_bundle: true
-    postgres_streaming_replication: true
-    ansible_tower_version: 3.2.1-1.el7
+    postgres_streaming_replication: false
+    ansible_tower_version: 3.2.3-1.el7
   pre_tasks:
     - yum: name=vim-enhanced
   roles:
