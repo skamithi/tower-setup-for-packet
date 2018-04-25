@@ -34,9 +34,10 @@
     msg: "More than 3 postgres servers it not allowed"
 
 - assert:
-    that: "postgres_streaming_replication == True and postgres_servers|length == 2"
+    that: "postgres_servers|length == 2"
     msg: "Postgres streaming replication requires 2 Postgres servers"
-
+  when: postgres_streaming_replication == True
+  
 - name: download latest tower
   unarchive:
     src: "{{tower_install_url }}"
